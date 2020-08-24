@@ -84,8 +84,8 @@ long SPDMotor::getEncoderPosition() {
 
 SPDMotor *motorLF = new SPDMotor(18, 31, true, 12, 34, 35); // <- Encoder reversed to make +position measurement be forward.
 SPDMotor *motorRF = new SPDMotor(19, 38, false, 8, 36, 37); // <- NOTE: Motor Dir pins reversed for opposite operation
-SPDMotor *motorLR = new SPDMotor( 3, 49, true,  9, 43, 42); // <- Encoder reversed to make +position measurement be forward.
-SPDMotor *motorRR = new SPDMotor( 2, A1, false, 5, A4, A5); // <- NOTE: Motor Dir pins reversed for opposite operation
+//SPDMotor *motorLR = new SPDMotor( 3, 49, true,  9, 43, 42); // <- Encoder reversed to make +position measurement be forward.
+//SPDMotor *motorRR = new SPDMotor( 2, A1, false, 5, A4, A5); // <- NOTE: Motor Dir pins reversed for opposite operation
 
 void setup()
 {
@@ -93,8 +93,7 @@ void setup()
   delay(300) ;//added delay to give wireless ps2 module some time to startup, before configuring it
   //CHANGES for v1.6 HERE!!! **************PAY ATTENTION*************
 
-  //setup pins and settings: GamePad(clock, command, attention, data, Pressures?, Rumble?) check for error
-//  error = ps2x.config_gamepad(PS2_CLK, PS2_CMD, PS2_SEL, PS2_DAT, pressures, rumble);
+ 
 
 //  if (error == 0) {
 //    Serial.println("Found Controller, configuration successful ");
@@ -143,12 +142,25 @@ void loop() {
 //    return;
 //  }
 //  else  { //DualShock Controller
-//    static long oldSumPosition = 0;
-//    long sumPosition = motorLF->getEncoderPosition() + motorRF->getEncoderPosition() + motorLR->getEncoderPosition() + motorRR->getEncoderPosition();
+    static long oldSumPosition = 0;
+
 //    long deltaPosition = sumPosition - oldSumPosition;
 //    oldSumPosition = sumPosition;
-//    Serial.print("∆pos: ");
-//    Serial.print(deltaPosition);
+    motorLF->speed(200); 
+    motorRF->speed(200);
+    byte LeftMotorPose = motorLF->getEncoderPosition() ;
+    byte RightMotorPose= motorRF->getEncoderPosition() ;
+    byte LeftMotorSpeed = motorLF->getSpeed();
+    byte RightMotorSpeed = motorRF->getSpeed();
+    Serial.print("LeftMotor Position:");
+    Serial.println(LeftMotorPose);
+    Serial.print("LeftMotor Speed:");
+    Serial.println(LeftMotorSpeed);
+    Serial.print("RightMotor Position");
+    Serial.println(RightMotorPose);
+    Serial.print("RightMotor Speed:");
+    Serial.println(RightMotorSpeed);
+    Serial.println("------");
 //    long posVibrate = abs(deltaPosition);
 //    posVibrate = posVibrate > 255 ? 255 : 0;
 //    vibrate = (byte)posVibrate;
